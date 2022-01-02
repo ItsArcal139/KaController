@@ -17,6 +17,7 @@ public class GamePad {
     }
 
     public void pollInput() {
+        if(!XInputNative.isSupported()) return;
         XInputNative.StateResult result = XInputNative.internalGetState(index);
         var oldState = this.state;
         this.state = new GamePadState(result.result() == 0, result.state(), GamePadDeadZone.INDEPENDENT_AXES);
@@ -51,10 +52,12 @@ public class GamePad {
     }
 
     public void setVibration(float leftMotor, float rightMotor) {
+        if(!XInputNative.isSupported()) return;
         XInputNative.internalSetState(index, leftMotor, rightMotor);
     }
 
     public GamePadBatteryInfo getBatteryInfo() {
+        if(!XInputNative.isSupported()) return GamePadBatteryInfo.disconnected();
         XInputNative.BatteryInfoResult result = XInputNative.internalGetBatteryInfo(index);
         if(result.result() != 0) {
             return GamePadBatteryInfo.disconnected();
