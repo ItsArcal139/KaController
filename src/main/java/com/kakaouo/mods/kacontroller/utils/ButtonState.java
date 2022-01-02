@@ -6,4 +6,8 @@ public enum ButtonState {
     public static ButtonState fromButton(short pressed, ButtonConstants button) {
         return (pressed & button.getFlag()) != 0 ? PRESSED : RELEASED;
     }
+
+    public boolean isPressed() {
+        return this == PRESSED;
+    }
 }

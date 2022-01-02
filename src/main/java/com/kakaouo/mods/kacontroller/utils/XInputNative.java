@@ -47,7 +47,7 @@ public class XInputNative {
 
     public static native StateResult internalGetState(PlayerIndex index);
 
-    public static native StateResult internalSetState(PlayerIndex index, float leftMotor, float rightMotor);
+    public static native void internalSetState(PlayerIndex index, float leftMotor, float rightMotor);
 
     public static void load() {}
 }

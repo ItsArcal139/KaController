@@ -17,6 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mouse.class)
 public abstract class MouseMixin {
+    private long lastMillis = -1;
+
+    private boolean lastLeftTriggered = false;
+    private boolean lastRightTriggered = false;
+
     @Shadow private double cursorDeltaX;
 
     @Shadow private double cursorDeltaY;
@@ -35,10 +40,16 @@ public abstract class MouseMixin {
         var state = GamePad.getState(PlayerIndex.ONE);
         if(!state.isConnected()) return;
 
-        float multiplier = 20;
-        var rightThumb = applyDualZone(state.getThumbSticks().right());
-        cursorDeltaX += rightThumb.x() * multiplier;
-        cursorDeltaY -= rightThumb.y() * multiplier;
+        long current = System.currentTimeMillis();
+        long deltaMillis = current - lastMillis;
+        if(lastMillis == -1) deltaMillis = 0;
+
+        float sensitivity = (float)MinecraftClient.getInstance().options.mouseSensitivity;
+        float multiplier = deltaMillis / sensitivity;
+        var rightThumb = state.getThumbSticks().right();
+        var distance = applyDualZone((float)rightThumb.getDistanceToCenter());
+        cursorDeltaX += Math.cos(rightThumb.getAngle()) * distance * multiplier;
+        cursorDeltaY -= Math.sin(rightThumb.getAngle()) * distance * multiplier;
 
         if(MinecraftClient.getInstance().currentScreen != null) return;
         var triggers = state.getTriggers();
@@ -50,6 +61,15 @@ public abstract class MouseMixin {
                 this.onMouseButton(MinecraftClient.getInstance().getWindow().getHandle(),
                         GLFW.GLFW_MOUSE_BUTTON_LEFT, action, 0);
             }
+            lastLeftTriggered = true;
+        } else {
+            if(lastLeftTriggered) {
+                lastLeftTriggered = false;
+                if(leftButtonClicked) {
+                    this.onMouseButton(MinecraftClient.getInstance().getWindow().getHandle(),
+                            GLFW.GLFW_MOUSE_BUTTON_LEFT, 0, 0);
+                }
+            }
         }
 
         if(triggers.left() > 0.01) {
@@ -59,7 +79,18 @@ public abstract class MouseMixin {
                 this.onMouseButton(MinecraftClient.getInstance().getWindow().getHandle(),
                         GLFW.GLFW_MOUSE_BUTTON_RIGHT, action, 0);
             }
+            lastRightTriggered = true;
+        } else {
+            if(lastRightTriggered) {
+                lastRightTriggered = false;
+                if(rightButtonClicked) {
+                    this.onMouseButton(MinecraftClient.getInstance().getWindow().getHandle(),
+                            GLFW.GLFW_MOUSE_BUTTON_RIGHT, 0, 0);
+                }
+            }
         }
+
+        lastMillis = current;
     }
 
     private float applyDualZone(float value) {

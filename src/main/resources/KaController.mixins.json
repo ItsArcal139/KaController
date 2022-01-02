@@ -4,8 +4,13 @@
   "package": "com.kakaouo.mods.kacontroller.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractClientPlayerEntityMixin",
+    "ClientPlayerEntityMixin",
+    "EntityMixin",
     "KeyboardInputMixin",
-    "MouseMixin"
+    "LivingEntityMixin",
+    "MouseMixin",
+    "PlayerEntityMixin"
   ],
   "client": [
   ],
