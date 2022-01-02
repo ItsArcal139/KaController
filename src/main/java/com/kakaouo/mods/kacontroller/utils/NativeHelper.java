@@ -20,4 +20,8 @@ public class NativeHelper {
     public static XInputNative.StateResult createStateResult(int result, XInputNative.RawGamePadState state) {
         return new XInputNative.StateResult(result, state);
     }
+
+    public static XInputNative.BatteryInfoResult createBatteryInfoResult(int result, short batteryType, short batteryLevel) {
+        return new XInputNative.BatteryInfoResult(result, batteryType, batteryLevel);
+    }
 }

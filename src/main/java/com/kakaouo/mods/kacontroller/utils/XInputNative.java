@@ -9,6 +9,10 @@ import java.util.Optional;
 public class XInputNative {
     private static boolean supported = false;
 
+    public static boolean isSupported() {
+        return supported;
+    }
+
     static {
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("kacontroller");
         if(container.isEmpty()) {
@@ -28,6 +32,8 @@ public class XInputNative {
 
     public record StateResult(int result, RawGamePadState state) {}
 
+    public record BatteryInfoResult(int result, short batteryType, short batteryLevel) {}
+
     public record RawGamePadState(int packetNumber, RawGamePad gamepad) {
         public static RawGamePadState zero() {
             return new RawGamePadState(0, RawGamePad.zero());
@@ -46,6 +52,8 @@ public class XInputNative {
     }
 
     public static native StateResult internalGetState(PlayerIndex index);
+
+    public static native BatteryInfoResult internalGetBatteryInfo(PlayerIndex index);
 
     public static native void internalSetState(PlayerIndex index, float leftMotor, float rightMotor);
 

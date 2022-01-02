@@ -6,9 +6,11 @@
   "mixins": [
     "AbstractClientPlayerEntityMixin",
     "ClientPlayerEntityMixin",
+    "DebugHudMixin",
     "EntityMixin",
     "KeyboardInputMixin",
     "LivingEntityMixin",
+    "MinecraftClientMixin",
     "MouseMixin",
     "PlayerEntityMixin"
   ],

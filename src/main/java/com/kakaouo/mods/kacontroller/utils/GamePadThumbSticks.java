@@ -9,5 +9,9 @@ public record GamePadThumbSticks(StickValue left, StickValue right) {
         public double getAngle() {
             return Math.atan2(y, x);
         }
+
+        public String toShortString() {
+            return String.format("[%f, %f]", x, y);
+        }
     }
 }

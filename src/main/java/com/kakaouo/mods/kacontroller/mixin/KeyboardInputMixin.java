@@ -2,6 +2,7 @@ package com.kakaouo.mods.kacontroller.mixin;
 
 import com.kakaouo.mods.kacontroller.utils.ButtonState;
 import com.kakaouo.mods.kacontroller.utils.GamePad;
+import com.kakaouo.mods.kacontroller.utils.GamePadManager;
 import com.kakaouo.mods.kacontroller.utils.PlayerIndex;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class KeyboardInputMixin extends Input {
     @Inject(method = "tick", at = @At("RETURN"))
     public void tick(boolean slowDown, CallbackInfo ci) {
-        var state = GamePad.getState(PlayerIndex.ONE);
+        var state = GamePadManager.getGamePad(PlayerIndex.ONE).getState();
         if(!state.isConnected()) return;
 
         var leftThumb = state.getThumbSticks().left();

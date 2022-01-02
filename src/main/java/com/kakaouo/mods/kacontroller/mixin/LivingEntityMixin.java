@@ -8,5 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
+    @Shadow public abstract float getMaxHealth();
+
+    @Shadow protected float lastDamageTaken;
     @Shadow protected int lastAttackedTicks;
 }

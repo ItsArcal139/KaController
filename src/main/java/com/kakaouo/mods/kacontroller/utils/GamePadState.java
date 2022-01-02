@@ -1,5 +1,8 @@
 package com.kakaouo.mods.kacontroller.utils;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class GamePadState {
     private boolean isConnected;
     private int packetNumber;
@@ -51,6 +54,23 @@ public class GamePadState {
 
     public GamePadTriggers getTriggers() {
         return this.triggers;
+    }
+
+    public Map<String, ButtonState> getAllButtonStates() {
+        Map<String, ButtonState> map = new HashMap<>();
+        for(Map.Entry<String, ButtonState> entry : buttons.buttons().entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        for(Map.Entry<String, ButtonState> entry : dPad.buttons().entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    public Map<String, ButtonState> getAllPressedButtonStates() {
+        return getAllButtonStates().entrySet().stream()
+                .filter(entry -> entry.getValue().isPressed())
+                .collect(KakaUtils.mapCollector());
     }
 
     @Override

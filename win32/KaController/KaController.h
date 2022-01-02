@@ -16,10 +16,18 @@ extern "C" {
 
 	/*
 	 * Class:     com_kakaouo_mods_kacontroller_utils_XInputNative
+	 * Method:    internalGetBatteryInfo
+	 * Signature: (Lcom/kakaouo/mods/kacontroller/utils/PlayerIndex;)Lcom/kakaouo/mods/kacontroller/utils/XInputNative/BatteryInfoResult;
+	 */
+	JNIEXPORT jobject JNICALL Java_com_kakaouo_mods_kacontroller_utils_XInputNative_internalGetBatteryInfo
+	(JNIEnv*, jclass, jobject);
+
+	/*
+	 * Class:     com_kakaouo_mods_kacontroller_utils_XInputNative
 	 * Method:    internalSetState
 	 * Signature: (Lcom/kakaouo/mods/kacontroller/utils/PlayerIndex;FF)Lcom/kakaouo/mods/kacontroller/utils/XInputNative/StateResult;
 	 */
-	JNIEXPORT jobject JNICALL Java_com_kakaouo_mods_kacontroller_utils_XInputNative_internalSetState
+	JNIEXPORT void JNICALL Java_com_kakaouo_mods_kacontroller_utils_XInputNative_internalSetState
 	(JNIEnv*, jclass, jobject, jfloat, jfloat);
 
 #ifdef __cplusplus

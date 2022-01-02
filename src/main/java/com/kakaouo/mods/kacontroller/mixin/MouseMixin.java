@@ -1,6 +1,7 @@
 package com.kakaouo.mods.kacontroller.mixin;
 
 import com.kakaouo.mods.kacontroller.utils.GamePad;
+import com.kakaouo.mods.kacontroller.utils.GamePadManager;
 import com.kakaouo.mods.kacontroller.utils.GamePadThumbSticks;
 import com.kakaouo.mods.kacontroller.utils.PlayerIndex;
 import net.minecraft.client.MinecraftClient;
@@ -37,7 +38,7 @@ public abstract class MouseMixin {
                     target = "Lnet/minecraft/client/Mouse;client:Lnet/minecraft/client/MinecraftClient;",
                     ordinal = 6))
     public void updateMouse(CallbackInfo ci) {
-        var state = GamePad.getState(PlayerIndex.ONE);
+        var state = GamePadManager.getGamePad(PlayerIndex.ONE).getState();
         if(!state.isConnected()) return;
 
         long current = System.currentTimeMillis();
