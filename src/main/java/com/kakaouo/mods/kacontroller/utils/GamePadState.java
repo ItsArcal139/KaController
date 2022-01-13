@@ -56,18 +56,18 @@ public class GamePadState {
         return this.triggers;
     }
 
-    public Map<String, ButtonState> getAllButtonStates() {
-        Map<String, ButtonState> map = new HashMap<>();
-        for(Map.Entry<String, ButtonState> entry : buttons.buttons().entrySet()) {
+    public Map<ControllerButtons, ButtonState> getAllButtonStates() {
+        Map<ControllerButtons, ButtonState> map = new HashMap<>();
+        for(Map.Entry<ControllerButtons, ButtonState> entry : buttons.buttons().entrySet()) {
             map.put(entry.getKey(), entry.getValue());
         }
-        for(Map.Entry<String, ButtonState> entry : dPad.buttons().entrySet()) {
+        for(Map.Entry<ControllerButtons, ButtonState> entry : dPad.buttons().entrySet()) {
             map.put(entry.getKey(), entry.getValue());
         }
         return map;
     }
 
-    public Map<String, ButtonState> getAllPressedButtonStates() {
+    public Map<ControllerButtons, ButtonState> getAllPressedButtonStates() {
         return getAllButtonStates().entrySet().stream()
                 .filter(entry -> entry.getValue().isPressed())
                 .collect(KakaUtils.mapCollector());

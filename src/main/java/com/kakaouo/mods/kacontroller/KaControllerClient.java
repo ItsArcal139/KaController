@@ -10,6 +10,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,8 +30,9 @@ public class KaControllerClient implements ClientModInitializer {
 
             PlayerInventory inv = player.getInventory();
             switch (button) {
-                case "RB" -> inv.selectedSlot = ++inv.selectedSlot % 9;
-                case "LB" -> inv.selectedSlot = inv.selectedSlot == 0 ? 8 : --inv.selectedSlot;
+                case RB -> inv.selectedSlot = ++inv.selectedSlot % 9;
+                case LB -> inv.selectedSlot = inv.selectedSlot == 0 ? 8 : --inv.selectedSlot;
+                case DPAD_UP -> player.dropSelectedItem(false);
             }
         });
     }

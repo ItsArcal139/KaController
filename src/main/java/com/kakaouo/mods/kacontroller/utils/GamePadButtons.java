@@ -1,7 +1,6 @@
 package com.kakaouo.mods.kacontroller.utils;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public record GamePadButtons(
         ButtonState start, ButtonState back,
@@ -10,37 +9,37 @@ public record GamePadButtons(
         ButtonState a, ButtonState b, ButtonState x, ButtonState y) {
     public GamePadButtons(short buttons)  {
         this(
-                ButtonState.fromButton(buttons, ButtonConstants.START),
-                ButtonState.fromButton(buttons, ButtonConstants.BACK),
-                ButtonState.fromButton(buttons, ButtonConstants.LEFT_THUMB),
-                ButtonState.fromButton(buttons, ButtonConstants.RIGHT_THUMB),
-                ButtonState.fromButton(buttons, ButtonConstants.LEFT_SHOULDER),
-                ButtonState.fromButton(buttons, ButtonConstants.RIGHT_SHOULDER),
-                ButtonState.fromButton(buttons, ButtonConstants.GUIDE),
-                ButtonState.fromButton(buttons, ButtonConstants.A),
-                ButtonState.fromButton(buttons, ButtonConstants.B),
-                ButtonState.fromButton(buttons, ButtonConstants.X),
-                ButtonState.fromButton(buttons, ButtonConstants.Y)
+                ButtonState.fromButton(buttons, ControllerButtons.START),
+                ButtonState.fromButton(buttons, ControllerButtons.BACK),
+                ButtonState.fromButton(buttons, ControllerButtons.LS),
+                ButtonState.fromButton(buttons, ControllerButtons.RS),
+                ButtonState.fromButton(buttons, ControllerButtons.LB),
+                ButtonState.fromButton(buttons, ControllerButtons.RB),
+                ButtonState.fromButton(buttons, ControllerButtons.GUIDE),
+                ButtonState.fromButton(buttons, ControllerButtons.A),
+                ButtonState.fromButton(buttons, ControllerButtons.B),
+                ButtonState.fromButton(buttons, ControllerButtons.X),
+                ButtonState.fromButton(buttons, ControllerButtons.Y)
         );
     }
 
-    public Map<String, ButtonState> buttons() {
+    public Map<ControllerButtons, ButtonState> buttons() {
         return Map.ofEntries(
-                Map.entry("Start", start),
-                Map.entry("Back", back),
-                Map.entry("LS", leftStick),
-                Map.entry("RS", rightStick),
-                Map.entry("LB", leftShoulder),
-                Map.entry("RB", rightShoulder),
-                Map.entry("Guide", guide),
-                Map.entry("A", a),
-                Map.entry("B", b),
-                Map.entry("X", x),
-                Map.entry("Y", y)
+                Map.entry(ControllerButtons.START, start),
+                Map.entry(ControllerButtons.BACK, back),
+                Map.entry(ControllerButtons.LS, leftStick),
+                Map.entry(ControllerButtons.RS, rightStick),
+                Map.entry(ControllerButtons.LB, leftShoulder),
+                Map.entry(ControllerButtons.RB, rightShoulder),
+                Map.entry(ControllerButtons.GUIDE, guide),
+                Map.entry(ControllerButtons.A, a),
+                Map.entry(ControllerButtons.B, b),
+                Map.entry(ControllerButtons.X, x),
+                Map.entry(ControllerButtons.Y, y)
         );
     }
 
-    public Map<String, ButtonState> pressedButtons() {
+    public Map<ControllerButtons, ButtonState> pressedButtons() {
         return buttons().entrySet().stream()
                 .filter(entry -> entry.getValue().isPressed())
                 .collect(KakaUtils.mapCollector());

@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 public class GamePad {
     private PlayerIndex index;
     private GamePadState state = new GamePadState(false, XInputNative.RawGamePadState.zero(), GamePadDeadZone.NONE);
-    private List<Consumer<String>> buttonDownListeners = new ArrayList<>();
-    private List<Consumer<String>> buttonUpListeners = new ArrayList<>();
+    private List<Consumer<ControllerButtons>> buttonDownListeners = new ArrayList<>();
+    private List<Consumer<ControllerButtons>> buttonUpListeners = new ArrayList<>();
 
     GamePad(PlayerIndex index) {
         this.index = index;
@@ -39,11 +39,11 @@ public class GamePad {
         });
     }
 
-    public void addButtonDownListener(Consumer<String> listener) {
+    public void addButtonDownListener(Consumer<ControllerButtons> listener) {
         buttonDownListeners.add(listener);
     }
 
-    public void addButtonUpListener(Consumer<String> listener) {
+    public void addButtonUpListener(Consumer<ControllerButtons> listener) {
         buttonUpListeners.add(listener);
     }
 

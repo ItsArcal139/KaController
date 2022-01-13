@@ -1,9 +1,6 @@
 package com.kakaouo.mods.kacontroller.mixin;
 
-import com.kakaouo.mods.kacontroller.utils.ButtonState;
-import com.kakaouo.mods.kacontroller.utils.GamePad;
-import com.kakaouo.mods.kacontroller.utils.GamePadManager;
-import com.kakaouo.mods.kacontroller.utils.XInputNative;
+import com.kakaouo.mods.kacontroller.utils.*;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Formatting;
@@ -35,8 +32,8 @@ public abstract class DebugHudMixin {
 
                     var state = pad.getState();
                     StringBuilder sb = new StringBuilder();
-                    for(String button : state.getAllPressedButtonStates().keySet()) {
-                        sb.append(", ").append(button);
+                    for(ControllerButtons button : state.getAllPressedButtonStates().keySet()) {
+                        sb.append(", ").append(button.getName());
                     }
                     String str = sb.length() > 0 ? sb.substring(2) : "<none>";
                     list.add(" - Buttons: " + str);
