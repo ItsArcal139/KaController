@@ -4,6 +4,11 @@ import com.kakaouo.mods.kacontroller.KaControllerClient;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Optional;
 
 public class XInputNative {
@@ -14,19 +19,60 @@ public class XInputNative {
     }
 
     static {
-        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("kacontroller");
-        if(container.isEmpty()) {
-            throw new AssertionError("Mod ID mismatch?");
+        ModContainer container = FabricLoader.getInstance().getModContainer("kacontroller")
+                .orElseThrow(() -> new AssertionError("Mod ID mismatch?"));
+
+        boolean failedDuringCopy = false;
+
+        File libFolder = new File(FabricLoader.getInstance().getConfigDir().toString(), "../mods/KaController/");
+        if(!libFolder.exists()) {
+            failedDuringCopy = !libFolder.mkdir();
         }
 
-        String path = container.get().getPath("KaController.dll").toAbsolutePath().toString();
-        KaControllerClient.logger.info("Loading native library from " + path);
+        if(failedDuringCopy) {
+            KaControllerClient.logger.info("Failed to make a folder at " + libFolder);
+        }
 
-        try {
-            System.load(path);
-            supported = true;
-        } catch (UnsatisfiedLinkError error) {
-            KaControllerClient.logger.warn("Failed to load library: " + error);
+        File libFile = new File(libFolder, "KaController.dll");
+        if(!libFile.exists() && !failedDuringCopy) {
+            InputStream stream = null;
+            FileOutputStream output = null;
+            try {
+                libFile.createNewFile();
+                stream = XInputNative.class.getClassLoader().getResourceAsStream("KaController.dll");
+                output = new FileOutputStream(libFile);
+                output.write(stream.readAllBytes());
+            } catch(IOException ex) {
+                KaControllerClient.logger.warn("Failed to copy library: " + ex);
+                failedDuringCopy = true;
+            } catch(Exception ex) {
+                KaControllerClient.logger.error("Failed to copy library: " + ex);
+                failedDuringCopy = true;
+            } finally {
+                try {
+                    if (output != null) output.close();
+                } catch(IOException ex) {
+                    // ignored
+                }
+
+                try {
+                    if(stream != null) stream.close();
+                } catch (IOException ex) {
+                    // ignored
+                }
+            }
+        }
+
+        if(!failedDuringCopy) {
+            String path = libFile.getAbsolutePath();
+            KaControllerClient.logger.info("Loading native library from " + path);
+
+            try {
+                System.load(path);
+                supported = true;
+            } catch (UnsatisfiedLinkError error) {
+                KaControllerClient.logger.warn("Failed to load library: " + error);
+            }
         }
     }
 

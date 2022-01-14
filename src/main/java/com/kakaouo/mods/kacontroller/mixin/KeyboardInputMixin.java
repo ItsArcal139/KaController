@@ -4,6 +4,7 @@ import com.kakaouo.mods.kacontroller.utils.ButtonState;
 import com.kakaouo.mods.kacontroller.utils.GamePad;
 import com.kakaouo.mods.kacontroller.utils.GamePadManager;
 import com.kakaouo.mods.kacontroller.utils.PlayerIndex;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +28,8 @@ public abstract class KeyboardInputMixin extends Input {
         if(movementSideways > 1) movementSideways = 1;
         if(movementSideways < -1) movementSideways = -1;
 
-        jumping = state.getButtons().a() == ButtonState.PRESSED;
-        sneaking = state.getButtons().b() == ButtonState.PRESSED;
+        MinecraftClient client = MinecraftClient.getInstance();
+        jumping = state.getButtons().a() == ButtonState.PRESSED || client.options.keyJump.isPressed();
+        sneaking = state.getButtons().b() == ButtonState.PRESSED || client.options.keySneak.isPressed();
     }
 }
